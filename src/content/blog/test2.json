@@ -1,0 +1,61 @@
+{
+  "title": "My Second blog post",
+  "author": "yiern",
+  "description": "This is my second blog post ever using Astro.js!",
+  "date": "2023/07/26",
+  "slug": "test2",
+  "featured": "false",
+  "coverImageURL": "/placeholder-about.jpg",
+  "coverImageAlt": "about placeholder",
+  "sections": [
+    {
+      "title": "Section 1",
+      "paragraphs": [
+        {
+          "type": "basic",
+          "content": "This is the first paragraph of a section"
+        },
+        {
+          "type": "basic",
+          "content":
+            "Each paragraph is a separate object that has a type which tells the page how to render it"
+        }
+      ],
+      "imageURL": "/placeholder-about.jpg",
+      "imageAlt": "placeholder about",
+      "imageSubtitle": "",
+      "imageOriginalSize": "false",
+      "imageSizes": ""
+    },
+    {
+      "title": "Section 2",
+      "paragraphs": [
+        {
+          "type": "setHTML",
+          "content":
+            "In the event we need to add any html capabilities to our content such as a <a class='blog-link' href='/'>link</a> or a line of <code>console.log(code)</code>"
+        },
+
+        {
+          "type": "unorderedList",
+          "content": [
+            "You can also have lists or onordered lists.",
+            "Just take note that we need to style them ourselves with tailwind"
+          ]
+        },
+        {
+          "type": "LinkButton",
+          "content": {
+            "buttonText": "We can even add components",
+            "buttonLink": "/"
+          }
+        }
+      ],
+      "imageURL": "/placeholder-hero.jpg",
+      "imageAlt": "placeholder hero",
+      "imageSubtitle": "",
+      "imageOriginalSize": "false",
+      "imageSizes": ""
+    }
+  ]
+}

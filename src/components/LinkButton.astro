@@ -1,0 +1,19 @@
+---
+export interface Props {
+  href: string;
+  btnStyle: string;
+  target?: string;
+  ariaLabel?: string;
+}
+
+const { href, btnStyle, target, ariaLabel } = Astro.props;
+---
+
+<a
+  href={href}
+  class={`my-5 block text-center py-2 ${btnStyle}`}
+  target={target}
+  aria-label={ariaLabel}
+>
+  <slot />
+</a>

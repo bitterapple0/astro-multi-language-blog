@@ -1,0 +1,238 @@
+---
+import LinkButton from "../components/LinkButton.astro";
+import Layout from "../layouts/Layout.astro";
+import { getEntry } from "astro:content";
+import { Prism } from "@astrojs/prism";
+import {
+  linkButtonSchema,
+  listSchema,
+  codeBlockSchema,
+  orderedListSchema,
+} from "../content/_schemata";
+
+let options: Intl.DateTimeFormatOptions = {
+  weekday: "long",
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+};
+const { slug } = Astro.params;
+if (slug === undefined) {
+  throw new Error("Slug is required");
+}
+
+const entry = await getEntry("blog", slug);
+if (entry === undefined) {
+  return Astro.redirect("/404");
+}
+
+const author = await getEntry("authors", entry.data.author.id);
+if (author === undefined) {
+  throw new Error(
+    `Author with id:${entry.data.author.id} could not be found in authors collection`
+  );
+}
+const blogData = entry.data;
+---
+
+<Layout title={blogData.title}>
+  <div class="mx-auto">
+    <header>
+      <div class="md:w-2/3 w-full mx-auto mb-10 md:mt-20 mt-10">
+        <h1 class="mx-auto">{blogData.title}</h1>
+        <p class="mt-6 text-sm">
+          {blogData.date.toLocaleDateString("en-US", options)}
+          <!-- Format date object  -->
+        </p>
+        <p class="mt-2">
+          <!-- Get data from author  -->
+          <a class="blog-link" href={author.data.socialLink} target="_blank"
+            >{author.data.name}</a
+          >
+        </p>
+      </div>
+    </header>
+    <section class="grid grid-cols-1 gap-y-6 mt-4 justify-items-center">
+      {
+        blogData.sections.map((section) => (
+          <>
+            {section.title && (
+              <div class="md:w-2/3 w-full">
+                <h2>{section.title}</h2>
+              </div>
+            )}
+            {section.paragraphs.map((paragraph) => {
+              switch (paragraph.type) {
+                case "orderedList":
+                  return (
+                    <ol
+                      start={orderedListSchema.parse(paragraph.content).start}
+                    >
+                      {orderedListSchema
+                        .parse(paragraph.content)
+                        .items.map((item) => (
+                          <li class="ltr:pl-4 rtl:pr-4" set:html={item} />
+                        ))}
+                    </ol>
+                  );
+                case "unorderedList":
+                  return (
+                    <ul>
+                      {listSchema.parse(paragraph.content).map((item) => (
+                        <li class="ltr:pl-4 rtl:pr-4" set:html={item} />
+                      ))}
+                    </ul>
+                  );
+
+                case "setHTML":
+                  return (
+                    <div class="md:w-2/3 w-full">
+                      <p set:html={paragraph.content} />
+                    </div>
+                  );
+                case "LinkButton":
+                  return (
+                    <LinkButton
+                      btnStyle="btn-orange"
+                      href={
+                        linkButtonSchema.parse(paragraph.content).buttonLink
+                      }
+                    >
+                      {linkButtonSchema.parse(paragraph.content).buttonText}
+                    </LinkButton>
+                  );
+                case "codeBlock":
+                  return (
+                    <div class="relative md:w-2/3 w-full rounded-lg bg-[#272a34]">
+                      <button class="absolute top-0 right-0 bg-black bg-opacity-60 text-white py-1 px-3 cursor-pointer rounded-lg copy-btn">
+                        <span class="copy-text inline" />
+                        <svg
+                          viewBox="0 0 24 24"
+                          focusable="false"
+                          class="w-5 h-5 pointer-events-none inline"
+                        >
+                          <path
+                            fill="currentColor"
+                            d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                          />
+                        </svg>
+                      </button>
+                      <Prism
+                        lang={codeBlockSchema.parse(paragraph.content).language}
+                        code={codeBlockSchema.parse(paragraph.content).code}
+                      />
+                    </div>
+                  );
+                case "subHeader":
+                  return <h3>{paragraph.content}</h3>;
+                default:
+                  return (
+                    <div class="md:w-2/3 w-full">
+                      <p>{paragraph.content}</p>
+                    </div>
+                  );
+              }
+            })}
+            {section.imageURL && (
+              <>
+                <div
+                  class={`rounded-md overflow-hidden
+                    ${
+                      section.imageOriginalSize
+                        ? "w-fit mx-auto"
+                        : "aspect-[3/2] w-full"
+                    }`}
+                >
+                  <img
+                    loading="lazy"
+                    src={section.imageURL}
+                    alt={section.imageAlt}
+                    class={`rounded-md w-full h-full ${
+                      section.imageOriginalSize
+                        ? "object-contain"
+                        : "object-cover"
+                    }`}
+                  />
+                </div>
+                {section.imageSubtitle && (
+                  <div class="md:w-2/3 w-full">
+                    <p
+                      set:html={section.imageSubtitle}
+                      class="text-center text-sm"
+                    />
+                  </div>
+                )}
+              </>
+            )}
+          </>
+        ))
+      }
+    </section>
+  </div>
+</Layout>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const copyButtons = document.querySelectorAll(".copy-btn");
+    copyButtons.forEach((btn) => {
+      // Ensure the button is of type Element
+      if (!(btn instanceof Element)) {
+        console.log("No button element");
+        return;
+      }
+
+      btn.addEventListener("click", (e) => {
+        // Type assertion for the event target as HTMLElement
+        const target = e.target as HTMLElement;
+
+        // Check for nextElementSibling and that it's an Element
+        const nextElem = target.nextElementSibling;
+        if (!nextElem || !(nextElem instanceof Element)) {
+          console.log("Next element missing");
+          return;
+        }
+
+        const codeBlock = nextElem.querySelector("code");
+
+        // Make sure codeBlock exists and is an HTMLElement
+        if (codeBlock && codeBlock instanceof HTMLElement) {
+          copyToClipboard(codeBlock.innerText);
+          const textElem = target.querySelector(".copy-text");
+          if (textElem) {
+            textElem.textContent = "Copied!";
+            setTimeout(() => {
+              textElem.textContent = "";
+            }, 1500);
+          }
+        } else {
+          console.log("Clicked but codeblock is not an element/undefined");
+        }
+      });
+    });
+  });
+
+  async function copyToClipboard(text: string) {
+    try {
+      await navigator.clipboard.writeText(text);
+      console.log("Text successfully copied to clipboard");
+    } catch (err) {
+      console.error("Failed to copy text: ", err);
+    }
+  }
+</script>
+<style>
+  ol {
+    @apply list-decimal md:w-[56%] w-[80%] mx-auto list-outside;
+  }
+  ul {
+    @apply list-disc md:w-[56%] w-[80%] mx-auto list-outside;
+  }
+  li {
+    @apply pb-4;
+  }
+  pre {
+    @apply w-full overflow-x-auto;
+  }
+  h3 {
+    @apply font-bold text-start md:w-2/3 w-full;
+  }
+</style>

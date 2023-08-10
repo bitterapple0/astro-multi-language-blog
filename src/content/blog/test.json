@@ -1,0 +1,75 @@
+{
+  "title": "My First blog post",
+  "author": "yiern",
+  "description": "This is my first blog post ever using Astro.js!",
+  "date": "2023/07/26",
+  "slug": "test",
+  "featured": "true",
+  "coverImageURL": "/placeholder-hero.jpg",
+  "coverImageAlt": "hero placeholder",
+  "sections": [
+    {
+      "title": "Section 1",
+      "paragraphs": [
+        {
+          "type": "basic",
+          "content": "This is the first paragraph of a section"
+        },
+        {
+          "type": "basic",
+          "content":
+            "Each paragraph is a separate object that has a type which tells the page how to render it"
+        },
+        {
+          "type": "codeBlock",
+          "content":{
+            "language":"tsx",
+            "code":"import { defineConfig } from 'astro/config';\r\nimport mdx from '@astrojs/mdx';\r\nimport sitemap from '@astrojs/sitemap';\r\nimport node from \"@astrojs/node\";\r\n\r\n\r\n// https://astro.build/config\r\nexport default defineConfig({\r\n  site: 'https://example.com',\r\n  integrations: [mdx(), sitemap()]\r\n  output: \"server\", // add this line\r\n  adapter: node({\r\n    mode: \"standalone\"\r\n  })\r\n});"
+          }
+        },
+        {
+          "type": "codeBlock",
+          "content":{
+            "language":"tsx",
+            "code":"\/\/ BlogPost.astro\r\n---\r\nimport type { CollectionEntry } from 'astro:content';\r\nimport BaseHead from '..\/components\/BaseHead.astro';\r\nimport Header from '..\/components\/Header.astro';\r\nimport Footer from '..\/components\/Footer.astro';\r\nimport FormattedDate from '..\/components\/FormattedDate.astro';\r\n\r\ntype Props = CollectionEntry<'blog'>['data'];\r\n\r\nconst { title, description, pubDate, updatedDate, heroImage } = Astro.props;\r\n---\r\n\r\n<html lang=\"en\">\r\n  <head>\r\n    <BaseHead title={title} description={description} \/>\r\n\t<style>\r\n\t\t.title {\r\n\t\t\tfont-size: 2em;\r\n\t\t\tmargin: 0.25em 0 0;\r\n\t\t}\r\n\t\thr {\r\n\t\t\tborder-top: 1px solid #ddd;\r\n\t\t\tmargin: 1rem 0;\r\n\t\t}\r\n\t\t.last-updated-on {\r\n\t\t\tfont-style: italic;\r\n\t\t}\r\n\t<\/style>\r\n  <\/head>\r\n\r\n  <body>\r\n\t<Header \/>\r\n\t<main>\r\n\t  <article>\r\n\t\t{heroImage && <img width={720} height={360} src={heroImage} alt=\"\" \/>}\r\n\t\t<h1 class=\"title\">{title}<\/h1>\r\n\t\t<FormattedDate date={pubDate} \/>\r\n\t\t{\r\n\t\t\tupdatedDate && (\r\n\t\t\t\t<div class=\"last-updated-on\">\r\n\t\t\t\t\tLast updated on <FormattedDate date={updatedDate} \/>\r\n\t\t\t\t<\/div>\r\n\t\t\t)\r\n\t\t}\r\n\t\t<hr \/>\r\n\t\t<slot \/> \/\/ external code goes here\r\n\t  <\/article>\r\n\t<\/main>\r\n\t<Footer \/>\r\n  <\/body>\r\n<\/html>"
+          }
+        }
+      ],
+      "imageURL": "/placeholder-about.jpg",
+      "imageAlt": "placeholder about",
+      "imageSubtitle": "",
+      "imageOriginalSize": "false",
+      "imageSizes": ""
+    },
+    {
+      "title": "Section 2",
+      "paragraphs": [
+        {
+          "type": "setHTML",
+          "content":
+            "In the event we need to add any html capabilities to our content such as a <a class='blog-link' href='/'>link</a> or a line of <code>console.log(code)</code>"
+        },
+
+        {
+          "type": "unorderedList",
+          "content": [
+            "You can also have lists or onordered lists.",
+            "Just take note that we need to style them ourselves with tailwind"
+          ]
+        },
+        {
+          "type": "LinkButton",
+          "content": {
+            "buttonText": "We can even add components",
+            "buttonLink": "/"
+          }
+        }
+      ],
+      "imageURL": "/placeholder-hero.jpg",
+      "imageAlt": "placeholder hero",
+      "imageSubtitle": "",
+      "imageOriginalSize": "false",
+      "imageSizes": ""
+    }
+  ]
+}

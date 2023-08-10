@@ -1,0 +1,69 @@
+---
+export interface Props {
+  founderName: string;
+  descriptionKey: string;
+  linkedInURL: string;
+  imgURL: string;
+  imgOnLeft?: boolean;
+  redSquiggles?: boolean;
+}
+
+const {
+  founderName,
+  descriptionKey,
+  linkedInURL,
+  imgURL,
+  imgOnLeft = false,
+  redSquiggles = false,
+} = Astro.props;
+---
+
+<div
+  class={`flex ${
+    imgOnLeft ? "md:flex-row" : "md:flex-row-reverse"
+  } flex-col items-center mt-5`}
+>
+  <img
+    width="500"
+    height="475"
+    srcset={imgURL}
+    sizes="
+    (min-width:768px) 375px,
+    512px
+    "
+    alt=`Founder ${founderName}`
+    class="md:max-w-[371px] max-w-[512px] md:w-1/3 w-full"
+  />
+
+  <div class="flex flex-col md:items-start items-center">
+    {
+      redSquiggles && (
+        <img
+          width="167"
+          height="113"
+          src="/images/founders/red-squiggle.png"
+          alt="red squiggle"
+          class="w-[83px] h-[56px] ltr:ml-6 rtl:mr-6"
+        />
+      )
+    }
+    <h2 class="ltr:pl-6 rtl:pr-6 font-hs mt-2 font-black md:text-4xl text-3xl">
+      {founderName}
+    </h2>
+    <div class="flex gap-x-2 mt-2">
+      <img
+        width="30"
+        height="38"
+        src="/images/founders/blue-star.png"
+        alt="blue star"
+        class="h-5 w-5"
+      />
+      <p class="mt-0">
+        {descriptionKey}
+        <a class="block underline underline-offset-2 w-fit" href={linkedInURL}
+          >LinkedIn</a
+        >
+      </p>
+    </div>
+  </div>
+</div>

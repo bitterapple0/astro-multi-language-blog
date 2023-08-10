@@ -1,0 +1,122 @@
+---
+import Layout from "../layouts/Layout.astro";
+import LinkButton from "../components/LinkButton.astro";
+import { getCollection, getEntry } from "astro:content";
+
+let options: Intl.DateTimeFormatOptions = {
+  weekday: "long",
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+};
+const blogPosts = await getCollection("blog");
+const featuredPost = blogPosts.filter(({ data }) => data.featured).pop();
+if (featuredPost === undefined) {
+  throw new Error(
+    "Please set a post to be featured by setting the 'feature' key to 'true'."
+  );
+}
+const otherPosts = blogPosts.filter(({ data }) => !data.featured);
+---
+
+<Layout title={"Blog"}>
+  <header
+    class="grid md:grid-cols-12 grid-col-4 md:gap-x-5 md:mt-20 mt-10 md:gap-y-0 gap-y-6 items-center"
+  >
+    <div
+      class="md:hidden inline-block col-span-4 aspect-[3/2] rounded-md overflow-hidden"
+    >
+      <a href={featuredPost.data.slug}>
+        <img
+          srcset={featuredPost.data.coverImageURL}
+          sizes="
+          (max-width: 465px) 420px,
+          725px"
+          alt={featuredPost.data.coverImageAlt}
+          class="w-full h-full object-cover"
+        />
+      </a>
+    </div>
+    <div
+      class="inline-block md:col-start-1 md:col-end-6 md:ltr:pr-4 md:rtl:pl-4 md:col-span-5 col-span-4"
+    >
+      <div class="mt-1 mb-2 text-sm cursor-default">
+        <time
+          >{featuredPost.data.date.toLocaleDateString("en-US", options)}</time
+        >
+      </div>
+      <h1 class="hover:underline underline-offset-2">
+        <a href={featuredPost.data.slug}>{featuredPost.data.title}</a>
+      </h1>
+
+      <LinkButton href={featuredPost.data.slug} btnStyle="btn-orange w-fit">
+        Read More
+      </LinkButton>
+    </div>
+    <div
+      class="md:inline-block hidden col-start-6 col-end-[-1] aspect-[3/2] rounded-md overflow-hidden"
+    >
+      <a href={featuredPost.data.slug} class="">
+        <img
+          srcset={featuredPost.data.coverImageURL}
+          sizes="
+          (max-width: 830px) 420px,
+          725px"
+          alt={featuredPost.data.coverImageAlt}
+          class="w-full h-full object-cover"
+        />
+      </a>
+    </div>
+  </header>
+
+  {
+    otherPosts.length > 0 && (
+      <section class="md:mt-20 mt-10">
+        <h2>Latest Articles</h2>
+        <div class="grid lg:grid-cols-12 md:grid-col-6 md:grid-col-4 gap-x-5 md:gap-y-10 gap-y-6 md:mt-10 mt-6">
+          {otherPosts.map(({ data }) => (
+            <article class="md:col-span-6 col-span-4">
+              <div class="grid md:grid-cols-6 grid-cols-4 gap-x-5">
+                <div class="md:col-span-3 col-span-2 rounded-md overflow-hidden aspect-[3/2]">
+                  <a href={data.slug}>
+                    <img
+                      srcset={data.coverImageURL}
+                      sizes="
+                      (min-width: 1024px) 300px,
+                      (max-width: 465px) 200px,
+                      455px
+                      "
+                      alt={data.coverImageAlt}
+                      class="block rounded-md w-full h-full object-cover"
+                    />
+                  </a>
+                </div>
+                <div class="md:col-span-3 col-span-2">
+                  <h3 class="hover:underline underline-offset-2 w-full">
+                    <a href={data.slug}>{data.title}</a>
+                  </h3>
+                  <div class="mt-2 sm:text-sm text-xs cursor-default">
+                    <time>
+                      {data.date.toLocaleDateString("en-US", options)}
+                    </time>
+                  </div>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+    )
+  }
+</Layout>
+<style>
+  h1 {
+    @apply font-hs lg:text-[48px] lg:leading-[1.1] md:text-4xl sm:text-3xl text-2xl;
+  }
+  h2 {
+    @apply font-hs sm:text-4xl text-3xl;
+  }
+  h3 {
+    @apply font-hs sm:text-2xl text-base;
+  }
+</style>

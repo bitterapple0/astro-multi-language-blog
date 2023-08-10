@@ -1,0 +1,64 @@
+---
+import Layout from "../layouts/Layout.astro";
+import FounderContent from "../components/about/FounderContent.astro";
+import LinkButton from "../components/LinkButton.astro";
+---
+
+<Layout title="About Us">
+  <section class="mt-10">
+    <h1>Who Are We</h1>
+    <p class="mt-6">
+      Best Parents Inc is a global education company based in San Francisco with
+      13 years of worldwide experience in our executive team for international
+      accredited summer and winter camps . As our scope has expanded to 62
+      countries in 8 different currencies, the number of accredited education
+      companies we have collectively worked with has risen to 2000+.
+    </p>
+  </section>
+  <div class="mt-10">
+    <h2>Our Founders</h2>
+    <FounderContent
+      founderName="Burçin Advani"
+      descriptionKey="She is our fearless leader. With 12 years of experience in education consulting, she has placed hundreds of students abroad in international academic programs, international schools and top universities. She is an accredited education consultant to the British Council and Swiss Learning schools."
+      linkedInURL="https://www.linkedin.com/in/burcinonal/"
+      imgURL="https://imagedelivery.net/MvAo_D3s9gUte9MaPXkmyw/about/founder/burcin-bubble-1/w=375 375w, https://imagedelivery.net/MvAo_D3s9gUte9MaPXkmyw/about/founder/burcin-bubble-1/w=512 512w,"
+      imgOnLeft={true}
+      redSquiggles={true}
+    />
+    <FounderContent
+      founderName="Aditya Advani"
+      descriptionKey="He is our co-founder and a technology junkie. Has a wide range of experience with start-ups in Silicon Valley as an engineer. He has worked in unicorn start-ups as a lead engineer and believes he can change the world through education."
+      linkedInURL="https://www.linkedin.com/in/ninjaa/"
+      imgURL="https://imagedelivery.net/MvAo_D3s9gUte9MaPXkmyw/about/founder/aditya-bubble-1/w=375 375w,https://imagedelivery.net/MvAo_D3s9gUte9MaPXkmyw/about/founder/aditya-bubble-1/w=512 512w"
+    />
+  </div>
+
+  <section class="mt-10">
+    <h2>How Does Best Parents Work?</h2>
+    <br />
+    <p>
+      Best Parents is a future compass for young learners and their parents to
+      find their perfect fit in the new world.
+    </p>
+    <br />
+    <p class="font-bold">
+      Our edtech platform and experts enable young learners to explore their
+      present selves and navigate them through future ones, while providing
+      companionship for parents along the way.
+    </p>
+    <br />
+    <p>
+      You can reach our qualified advisors any time you want. They take care of
+      your needs before, during and after the summer program you pick. You can
+      book online easily and your advisor will get in touch with you immediately
+      to provide an exclusive experience.
+    </p>
+    <LinkButton
+      href="https://www.bestparents.com"
+      btnStyle="btn-orange w-fit mx-auto mt-14"
+      target="_blank"
+    >
+      Browse Official Website
+    </LinkButton>
+  </section>
+</Layout>

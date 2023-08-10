@@ -1,0 +1,120 @@
+---
+---
+
+<div class="flex items-end justify-between md:justify-start pt-8">
+  <a href="/" class="flex-shrink-0">
+    <img
+      width="161"
+      height="92"
+      class="ltr:mr-8 rtl:ml-8 w-[100px]"
+      src="/images/header/best-parents-orange-logo.png"
+      alt="Best Parents Logo Orange"
+    />
+  </a>
+
+  <div
+    class="w-full flex md:justify-between justify-end font-montserrat items-end"
+  >
+    <div class="md:flex hidden w-32 gap-x-8 whitespace-nowrap">
+      <div>
+        <a href="/about">About</a>
+      </div>
+      <div>
+        <a href="https://www.bestparents.com">Official Site</a>
+      </div>
+    </div>
+    <div class="flex items-center gap-x-1">
+      <button
+        aria-label="open sidebar menu"
+        id="openButton"
+        class="md:hidden w-[24px] h-[24px] pb-1"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true" aria-describedby="openIcon">
+          <title id="openIcon">Open Sidebar Menu</title>
+          <path
+            fill="currentColor"
+            d="M 3 5 A 1.0001 1.0001 0 1 0 3 7 L 21 7 A 1.0001 1.0001 0 1 0 21 5 L 3 5 z M 3 11 A 1.0001 1.0001 0 1 0 3 13 L 21 13 A 1.0001 1.0001 0 1 0 21 11 L 3 11 z M 3 17 A 1.0001 1.0001 0 1 0 3 19 L 21 19 A 1.0001 1.0001 0 1 0 21 17 L 3 17 z"
+          ></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div
+  id="sidebarMenu"
+  class="fixed bg-beige w-inherit top-0 w-full h-full pt-20 sidebar"
+  aria-hidden="true"
+>
+  <button
+    aria-label="close sidebar menu"
+    id="closeButton"
+    class="absolute ltr:right-0 ltr:mr-7 rtl:left-0 rtl:ml-7 w-[14px] h-[14px]"
+  >
+    <svg viewBox="0 0 24 24" aria-hidden="true" aria-describedby="closeIcon">
+      <title id="closeIcon">Close Sidebar Menu</title>
+      <path
+        fill="currentColor"
+        d="M.439,21.44a1.5,1.5,0,0,0,2.122,2.121L11.823,14.3a.25.25,0,0,1,.354,0l9.262,9.263a1.5,1.5,0,1,0,2.122-2.121L14.3,12.177a.25.25,0,0,1,0-.354l9.263-9.262A1.5,1.5,0,0,0,21.439.44L12.177,9.7a.25.25,0,0,1-.354,0L2.561.44A1.5,1.5,0,0,0,.439,2.561L9.7,11.823a.25.25,0,0,1,0,.354Z"
+      ></path></svg
+    >
+  </button>
+  <div class="linkContainer flex flex-col">
+    <a href="/">Home</a>
+    <a href="/about">About</a>
+    <a href="https://www.bestparents.com">Official Site</a>
+  </div>
+</div>
+
+<style>
+  .sidebar {
+    right: -105%;
+    transition: right 0.3s;
+    z-index: 20;
+  }
+  .sidebar.open {
+    right: 0;
+  }
+
+  .linkContainer {
+    width: full;
+  }
+  .linkContainer a {
+    display: inline-block;
+    padding: 15px;
+    text-decoration: none;
+    width: full;
+    text-align: center;
+    background: transparent;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    white-space: nowrap;
+  }
+
+  .linkContainer a:hover {
+    background-color: #f7f7f7;
+  }
+
+  #sidebarMenu[aria-hidden="true"] button,
+  #sidebarMenu[aria-hidden="true"] div {
+    visibility: hidden;
+  }
+</style>
+
+<script>
+  const sidebar = document.getElementById("sidebarMenu");
+  const openButton = document.getElementById("openButton");
+  const closeButton = document.getElementById("closeButton");
+
+  openButton?.addEventListener("click", () => {
+    sidebar?.setAttribute("aria-hidden", "false");
+    sidebar?.classList.add("open");
+    document.body.classList.add("fixed");
+  });
+  closeButton?.addEventListener("click", () => {
+    sidebar?.classList.remove("open");
+    sidebar?.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("fixed");
+  });
+</script>

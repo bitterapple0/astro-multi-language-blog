@@ -1,0 +1,48 @@
+---
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import "../styles/base.css";
+
+export interface Props {
+  title?: string;
+  ignoreMaxWidth?: boolean;
+  showFooterBubble?: boolean;
+}
+let { title, ignoreMaxWidth, showFooterBubble = true } = Astro.props;
+---
+
+<html dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <link href="themes/prism.css" rel="stylesheet" />
+  </head>
+
+  <body>
+    <div class="w-full relative min-h-screen">
+      {
+        showFooterBubble && (
+          <div
+            class="bg-footer-bubble absolute bottom-0 bg-[left_calc(30%)_top_calc(0%)] bg-cover h-[80%] max-h-[2500px] -z-10 w-full bg-no-repeat"
+            id="footer-bubble"
+          />
+        )
+      }
+      <div class="px-6 pt-3 md:px-12 md:pt-6 w-full m-auto max-w-[1350px]">
+        <Header />
+      </div>
+      <div
+        class={ignoreMaxWidth
+          ? ""
+          : "px-6 pt-3 md:px-12 md:pt-6 w-full m-auto max-w-[1350px]"}
+      >
+        <slot />
+      </div>
+      <div class="px-6 pt-3 md:px-12 md:pt-6 w-full m-auto max-w-[1350px]">
+        <Footer />
+      </div>
+    </div>
+  </body>
+</html>
